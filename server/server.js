@@ -1,22 +1,21 @@
 require('./config/config');
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
 
-var express = require('express');
-var app = express();
 var bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
-app.get('/usuario', function(req, res) {
-    res.json('get usuario')
-})
-app.post('/usuario', function(req, res) {
+app.use(require('./rutas/usuario'));
 
-    const body = req.body;
-    res.json({
-        body
-    });
+
+mongoose.connect(process.env.URLDB, (error, resp) => {
+    if (error) throw error;
+    console.log('base de datos online');
 });
+
 
 app.listen(process.env.PORT, () => {
     console.log("Escuchando !!" + process.env.PORT);
-})
+});
